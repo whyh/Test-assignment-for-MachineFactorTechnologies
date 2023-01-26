@@ -1,0 +1,5 @@
+# Using `> /proc/1/fd/1 2> /proc/1/fd/2` to redirect outputs to stdOut and stdErr of process 1 (container)
+* * * * * /usr/local/bin/python "${SERVICE_ROOT}/job.py" > /proc/1/fd/1 2> /proc/1/fd/2
+
+# Using `sleep 30` to await 30 seconds before running a command, as linux cron minimal resolution is 1 min
+* * * * * (sleep 30; /usr/local/bin/python "${SERVICE_ROOT}/job.py") > /proc/1/fd/1 2> /proc/1/fd/2
