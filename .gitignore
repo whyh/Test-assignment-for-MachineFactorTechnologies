@@ -1,0 +1,18 @@
+# MacOS
+.DS_Store
+
+# JetBrains IDE
+.idea
+
+# Jupyter
+.ipynb_checkpoints
+
+# Database data
+db/data
+
+# Sample files
+db/test_data
+"Task 2/trades_sample.parquet"
+
+# Secrets
+.env

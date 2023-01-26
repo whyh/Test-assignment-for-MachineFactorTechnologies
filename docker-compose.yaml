@@ -1,0 +1,49 @@
+version: "3.9"
+
+services:
+  db:
+    image: postgres:15.1-alpine3.17
+    restart: always
+    environment:
+        - "POSTGRES_DB=${DB_NAME}"
+        - "POSTGRES_USER=${DB_USER}"
+        - "POSTGRES_PASSWORD=${DB_PASSWORD}"
+        - "SAMPLE_DATA_PATH=${BARS_DATA_PATH}"
+    volumes:
+         - "./db/scripts/init.sql:/docker-entrypoint-initdb.d/init.sql"
+         - "./db/data:/var/lib/postgresql/data"
+         - "./db/scripts:/scripts"
+         - "${BARS_DATA_HOST_PATH}:${BARS_DATA_PATH}"
+    ports:
+        - "${DB_PORT}:${DB_PORT}"
+
+  notebooks:
+    build: "Task 1.1/."
+    restart: always
+    env_file:
+      - .env
+    volumes:
+      - "./Task 1.1/notebooks:/home/jovyan/notebooks"
+    ports:
+      - "8888:8888"
+    depends_on:
+      - db
+
+  cron_job:
+    build: "Task 1.2/."
+    restart: always
+    env_file:
+      - .env
+    depends_on:
+      - db
+
+  websocket:
+    build: "Task 2/."
+    env_file:
+      - .env
+    volumes:
+      - "${TRADES_SAMPLE_HOST_PATH}:${TRADES_SAMPLE_PATH}"
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
